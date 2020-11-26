@@ -15,7 +15,7 @@ using std::string;
 using std::vector;
 using std::ifstream;
 
-AirportGraph::AirportGraph(const std::string& file_routes, const std::string& file_airports): g_(file_routes, file_airports){
+/*AirportGraph::AirportGraph(const std::string& file_routes, const std::string& file_airports): g_(file_routes, file_airports){
     //Graph g_(file_routes, file_airports);//construct the graph with the data
     int count = 0;
     std::cout<<"R size: "<<g_.routes.size()<<std::endl;
@@ -309,7 +309,7 @@ void Graph::error(string message) const
 {
     cerr << "\033[1;31m[Graph Error]\033[0m " + message << endl;
 }
-
+*/
 
 int main() {
     AirportGraph a_("routes.txt", "airports.txt");

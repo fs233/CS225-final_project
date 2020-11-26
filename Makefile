@@ -1,10 +1,10 @@
 # Executable names:
-EXE = final
+EXE = final_project
 TEST = test
 
 # Add all object files needed for compiling:
 EXE_OBJ = main.o
-OBJS = graph.o main.o final.o
+OBJS = graph.o main.o graph_algorithms.o edge.o
 
 # Generated files
 CLEAN_RM = images/Out.png
