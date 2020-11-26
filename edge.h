@@ -100,8 +100,8 @@ class Edge
     }
     
 
-private:
-    double weight; /**< The edge weight (if in a weighed graph) **/
+private: 
     string label; /**< The edge label **/
-    
+    double weight; /**< The edge weight (if in a weighed graph) **/
+   
 };
