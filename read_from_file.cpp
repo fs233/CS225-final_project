@@ -1,4 +1,4 @@
-#include "final.h"
+#include "read_from_file.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -11,7 +11,8 @@ using std::vector;
 using std::ifstream;
 
 
-void shortest_path::read_route(const std::string& filename){
+std::vector<std::vector<std::string>> readfile::read_route(const std::string& filename){
+    std::vector<std::vector<std::string>> routes;
     ifstream wordsFile(filename);
     string airline;
     string airline_id;
@@ -45,8 +46,11 @@ void shortest_path::read_route(const std::string& filename){
         }
     }
     wordsFile.close();
+    return routes;
 }
-void shortest_path::read_route(const std::string& filename){
+
+std::map<std::string, std::pair<std::string, std::string>> readfile::read_airports(const std::string& filename){
+    std::map<std::string, std::pair<std::string, std::string>> position;
     ifstream wordsFile(filename);
     string airport_id;
     string name;
@@ -75,4 +79,5 @@ void shortest_path::read_route(const std::string& filename){
         }
     }
      wordsFile.close();
+     return position;
 }

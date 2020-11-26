@@ -10,4 +10,4 @@ OBJS = graph.o main.o final.o
 CLEAN_RM = images/Out.png
 
 # Use the cs225 makefile template:
-include cs225/make/cs225.mk
+include cs225/cs225.mk

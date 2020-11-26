@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <list>
@@ -14,8 +13,11 @@
 #include <set>
 #include <sstream>
 #include <vector>
+#include <map>
+#include <cstdlib>
 
 #include "edge.h"
+#include "read_from_file.h"
 
 using std::cerr;
 using std::cout;
@@ -28,6 +30,9 @@ using std::vector;
 using std::pair;
 using std::make_pair;
 using std::unordered_map;
+using std::string;
+using std::vector;
+using std::ifstream;
 
 
 /**
@@ -37,29 +42,26 @@ using std::unordered_map;
 class Graph
 {
 public:
+    
     /**
-     * Constructor to create an empty graph.
-     * @param weighted - specifies whether the graph is a weighted graph or
-     *  not
+     * Constructor to create a graph based on the data given
+     * @param file_routes - file including the routes
+     * 
+     * @param file_airports - file including the airports
      */
-    Graph(bool weighted);
+    Graph(const std::string& file_routes, const std::string& file_airports); 
 
     /**
-     * Constructor to create an empty graph.
-     * @param weighted - specifies whether the graph is a weighted graph or
-     *  not
-     * @param directed - specifies whether the graph is directed
+     *get the data of the routes
+     * @param filename - file including the routes
      */
-    Graph(bool weighted, bool directed);
+    std::vector<std::vector<std::string>> read_route(const std::string& filename);
 
     /**
-     * Constructor to create a random, connected graph.
-     * @param weighted - specifies whether the graph is a weighted graph or
-     *  not
-     * @param numVertices - the number of vertices the graph will have
-     * @param seed - a random seed to create the graph with
+     * get the data of the routes
+     * @param filname - file including the routes
      */
-    Graph(bool weighted, int numVertices, unsigned long seed);
+    std::map<std::string, std::pair<std::string, std::string>> read_airports(const std::string& filename); //get the data of the airports
 
     /**
      * Gets all adjacent vertices to the parameter vertex.
@@ -98,7 +100,7 @@ public:
     vector<Edge> getEdges() const;
 
     /**
-     * Checks if the given vertex exists.
+     * Checks if the given vertex exists as a source in the graph.
      * @return - if Vertex exists, true
      *         - if Vertex doesn't exist, return false
      */
@@ -118,7 +120,7 @@ public:
      * @return - if edge exists, set the label to the corresponding edge(if not directed, set the reverse one too), return edge with new label
      *         - if edge doesn't exist, return InvalidEdge
      */
-        Edge setEdgeLabel(Vertex source, Vertex destination, string label);
+    Edge setEdgeLabel(Vertex source, Vertex destination, string label);
 
     /**
      * Gets the edge label of the edge between vertices u and v.
@@ -136,7 +138,7 @@ public:
      * @return - if edge exists, return edge wright
      *         - if doesn't, return InvalidWeight
      */
-    int getEdgeWeight(Vertex source, Vertex destination) const;
+    double getEdgeWeight(Vertex source, Vertex destination) const;
 
     /**
      * Inserts a new vertex into the graph and initializes its label as "".
@@ -158,10 +160,11 @@ public:
      * Hence, an error is not thrown when it fails to insert an edge.
      * @param source - one vertex the edge is connected to
      * @param destination - the other vertex the edge is connected to
+     * @param weight - the weight of the edge
+     * @param label - label of the edge
      * @return whether inserting the edge was successful
      */
-    bool insertEdge(Vertex source, Vertex destination);
-
+    bool insertEdge(Vertex source, Vertex destination, double weight, std::string label);
     /**
      * Removes the edge between two vertices.
      * @param source - one vertex the edge is connected to
@@ -179,48 +182,25 @@ public:
      * @return - if edge exists, set edge weight and return  edge with new weight
      *         - if not, return InvalidEdge
      */
-    Edge setEdgeWeight(Vertex source, Vertex destination, int weight);
-
-    /**
-     * Creates a name for snapshots of the graph.
-     * @param title - the name to save the snapshots as
-     */
-    void initSnapshot(string title);
-
-    /**
-     * Saves a snapshot of the graph to file.
-     * initSnapshot() must be run first.
-     */
-    void snapshot();
+    Edge setEdgeWeight(Vertex source, Vertex destination, double weight);
 
     /**
      * Prints the graph to stdout.
      */
     void print() const;
 
-    /**
-     * Saves the graph as a PNG image.
-     * @param title - the filename of the PNG image
-     */
-    void savePNG(string title) const;
-
-    bool isDirected() const;
-
     void clear();
-
 
     const static Vertex InvalidVertex;
     const static Edge InvalidEdge;
     const static int InvalidWeight;
     const static string InvalidLabel;
-
-private:
+    std::vector<std::vector<std::string>> routes; //vector containing all information from the route
+    std::map<std::string, std::pair<std::string, std::string>> position; //using airport id to match with pair of latitude and longitude
     mutable unordered_map<Vertex, unordered_map<Vertex, Edge>> adjacency_list;
-
-    bool weighted;
-    bool directed;
-    int picNum;
-    string picName;
+private:
+   
+    
 
 
     /**

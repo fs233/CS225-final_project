@@ -5,72 +5,81 @@ const int Graph::InvalidWeight = INT_MIN;
 const string Graph:: InvalidLabel = "_CS225INVALIDLABEL";
 const Edge Graph::InvalidEdge = Edge(Graph::InvalidVertex, Graph::InvalidVertex, Graph::InvalidWeight, Graph::InvalidLabel);
 
-Graph::Graph(bool weighted) : weighted(weighted),directed(false),random(Random(0))
-{
+
+Graph::Graph(const std::string& file_routes, const std::string& file_airports){
+    routes = read_route(file_routes);
+    position = read_airports(file_airports);
 }
 
-Graph::Graph(bool weighted, bool directed) : weighted(weighted),directed(directed),random(Random(0))
-{
-}
+std::vector<std::vector<std::string>> Graph::read_route(const std::string& filename){
+    std::vector<std::vector<std::string>> routes;
+    ifstream wordsFile(filename);
+    string airline;
+    string airline_id;
+    string source;
+    string source_id;
+    string destination;
+    string destination_id;
+    string other_info;
 
-Graph::Graph(bool weighted, int numVertices, unsigned long seed)
-    :weighted(weighted),
-      directed(false),
-     random(Random(seed)) 
-{
-    if (numVertices < 2)
-    {
-     error("numVertices too low");
-     exit(1);
-    }
-
-    vector<Vertex> vertices;
-    for (int i = 0; i < numVertices; i++)
-    {
-        insertVertex(to_string(i));
-        vertices.push_back(to_string(i));
-    }
-
-    // make sure all vertices are connected
-    random.shuffle(vertices);
-    Vertex cur = vertices[0];
-    for (size_t i = 0; i < vertices.size() - 1; ++i)
-    {
-        Vertex next = vertices[i + 1];
-        insertEdge(cur, next);
-        if (weighted) 
-        {
-            int weight = random.nextInt();
-            setEdgeWeight(cur, next, weight);
+    if (wordsFile.is_open()) {
+        while(wordsFile.good()){
+            std::vector<std::string> one_route;
+            //reading information form each line of the file
+            getline(wordsFile, airline,',');
+            getline(wordsFile, airline_id,',');
+            getline(wordsFile, source,',');
+            getline(wordsFile, source_id,',');
+            getline(wordsFile, destination,',');
+            getline(wordsFile, destination_id,',');
+            getline(wordsFile, other_info,'\n');
+            //storing the information into the vec
+            one_route.push_back(airline);
+            one_route.push_back(airline_id);
+            one_route.push_back(source);
+            one_route.push_back(source_id);
+            one_route.push_back(destination);
+            one_route.push_back(destination_id);
+            one_route.push_back(other_info);
+            //strong one route in to the collection of the routes
+            routes.push_back(one_route);
         }
-        cur = next;
     }
+    wordsFile.close();
+    return routes;
+}
 
-    // keep the graph from being overpopulated with edges,
-    //  while still maintaining a little randomness
-    int numFailures = 0;
-    int idx = 0;
-    random.shuffle(vertices);
-    while (numFailures < 2) 
-    {
-        if (!insertEdge(vertices[idx], vertices[idx + 1])) 
-        {
-            ++numFailures;
-        } 
-        else 
-        {
-            // if insertEdge() succeeded...
-            if (weighted)
-                setEdgeWeight(vertices[idx], vertices[idx + 1],
-                              random.nextInt());
-            ++idx;
-            if (idx >= numVertices - 2) 
-            {
-                idx = 0;
-                random.shuffle(vertices);
+std::map<std::string, std::pair<std::string, std::string>> Graph::read_airports(const std::string& filename){
+    std::map<std::string, std::pair<std::string, std::string>> position;
+    ifstream wordsFile(filename);
+    string airport_id;
+    string name;
+    string city;
+    string country;
+    string iata;
+    string icao;
+    string lati;
+    string longi;
+    string alti;
+    string other_info;
+    if (wordsFile.is_open()) {
+        while(wordsFile.good()){
+            getline(wordsFile, airport_id,',');
+            getline(wordsFile, name,',');
+            getline(wordsFile, city,',');
+            getline(wordsFile, country,',');
+            getline(wordsFile, iata,',');
+            getline(wordsFile, icao,',');
+            getline(wordsFile, lati,',');//get lati
+            getline(wordsFile, longi,',');//get longi
+            getline(wordsFile, other_info,'\n');//other useless
+            if(position.find(airport_id)==position.end()){
+                position[airport_id] = std::make_pair(lati, longi);//storing the information needed in to the dictionary
             }
         }
     }
+     wordsFile.close();
+     return position;
 }
 
 vector<Vertex> Graph::getAdjacent(Vertex source) const 
@@ -137,10 +146,6 @@ vector<Edge> Graph::getEdges() const
                 //this pair is never added to seen
                 ret.push_back(its->second);
                 seen.insert(make_pair(source,destination));
-                if(!directed)
-                {
-                    seen.insert(make_pair(destination, source));
-                }
             }
         }
     }
@@ -166,11 +171,6 @@ Edge Graph::setEdgeLabel(Vertex source, Vertex destination, string label)
     Edge new_edge(source, destination, e.getWeight(), label);
     adjacency_list[source][destination] = new_edge;
 
-    if(!directed)
-    {
-        Edge new_edge_reverse(destination,source, e.getWeight(), label);
-        adjacency_list[destination][source] = new_edge_reverse;
-    }
     return new_edge;
 }
 
@@ -182,11 +182,8 @@ string Graph::getEdgeLabel(Vertex source, Vertex destination) const
     return adjacency_list[source][destination].getLabel();
 }
 
-int Graph::getEdgeWeight(Vertex source, Vertex destination) const
+double Graph::getEdgeWeight(Vertex source, Vertex destination) const
 {
-    if (!weighted)
-        error("can't get edge weights on non-weighted graphs!");
-
     if(assertEdgeExists(source, destination, __func__) == false)
         return InvalidWeight;
     return adjacency_list[source][destination].getWeight();
@@ -203,19 +200,8 @@ void Graph::insertVertex(Vertex v)
 
 Vertex Graph::removeVertex(Vertex v)
 {
-
     if (adjacency_list.find(v) != adjacency_list.end())
-    {
-        if(!directed){
-            for (auto it = adjacency_list[v].begin(); it != adjacency_list[v].end(); it++)
-            {
-                Vertex u = it->first;
-                adjacency_list[u].erase(v); 
-            }
-            adjacency_list.erase(v);
-            return v;
-        }
-        
+    {   
         adjacency_list.erase(v);
         for(auto it2 = adjacency_list.begin(); it2 != adjacency_list.end(); it2++)
         {
@@ -231,7 +217,8 @@ Vertex Graph::removeVertex(Vertex v)
     return InvalidVertex;
 }
 
-bool Graph::insertEdge(Vertex source, Vertex destination)
+
+bool Graph::insertEdge(Vertex source, Vertex destination, double weight, std::string label)
 {
     if(adjacency_list.find(source)!= adjacency_list.end() 
     && adjacency_list[source].find(destination)!= adjacency_list[source].end())
@@ -245,15 +232,7 @@ bool Graph::insertEdge(Vertex source, Vertex destination)
         adjacency_list[source] = unordered_map<Vertex, Edge>();
     }
         //source vertex exists
-    adjacency_list[source][destination] = Edge(source, destination);
-    if(!directed)
-    {
-        if(adjacency_list.find(destination)== adjacency_list.end())
-        {
-            adjacency_list[destination] = unordered_map<Vertex, Edge>();
-        }
-        adjacency_list[destination][source] = Edge(source, destination);
-    }
+    adjacency_list[source][destination] = Edge(source, destination, weight, label);
     
     return true;
 }
@@ -265,15 +244,12 @@ Edge Graph::removeEdge(Vertex source, Vertex destination)
     Edge e = adjacency_list[source][destination];
     adjacency_list[source].erase(destination);
     // if undirected, remove the corresponding edge
-    if(!directed)
-    {
-        adjacency_list[destination].erase(source);
-    }
+    
     return e;
 }
 
 
-Edge Graph::setEdgeWeight(Vertex source, Vertex destination, int weight)
+Edge Graph::setEdgeWeight(Vertex source, Vertex destination, double weight)
 {
     if (assertEdgeExists(source, destination, __func__) == false)
         return InvalidEdge;
@@ -281,13 +257,6 @@ Edge Graph::setEdgeWeight(Vertex source, Vertex destination, int weight)
     //std::cout << "setting weight: " << weight << std::endl;
     Edge new_edge(source, destination, weight, e.getLabel());
     adjacency_list[source][destination] = new_edge;
-
-    if(!directed)
-        {
-            Edge new_edge_reverse(destination,source, weight, e.getLabel());
-            adjacency_list[destination][source] = new_edge_reverse;
-        }
-
     return new_edge;
 }
 
@@ -312,25 +281,9 @@ bool Graph::assertEdgeExists(Vertex source, Vertex destination, string functionN
             error(functionName + " called on nonexistent edge " + source + " -> " + destination);
         return false;
     }
-
-    if(!directed)
-    {
-        if (assertVertexExists(destination,functionName) == false)
-            return false;
-        if(adjacency_list[destination].find(source)== adjacency_list[destination].end())
-        {
-            if (functionName != "")
-                error(functionName + " called on nonexistent edge " + destination + " -> " + source);
-            return false;
-        }
-    }
     return true;
 }
 
-bool Graph::isDirected() const
-{
-    return directed;
-}
 
 void Graph::clear()
 {
@@ -348,28 +301,6 @@ void Graph::error(string message) const
     cerr << "\033[1;31m[Graph Error]\033[0m " + message << endl;
 }
 
-/**
- * Creates a name for snapshots of the graph.
- * @param title - the name to save the snapshots as
- */
-void Graph::initSnapshot(string title)
-{
-    picNum = 0;
-    picName = title;
-}
-
-/**
- * Saves a snapshot of the graph to file.
- * initSnapshot() must be run first.
- */
-void Graph::snapshot()
-{
-    std::stringstream ss;
-    ss << picNum;
-    string newName = picName + ss.str();
-    savePNG(newName);
-    ++picNum;
-}
 
 /**
  * Prints the graph to stdout.
@@ -385,110 +316,13 @@ void Graph::print() const
             ss << it2->first; 
             string vertexColumn = "    => " + ss.str();
             vertexColumn += " " ;
-            cout << std::left << std::setw(26) << vertexColumn;
+            cout << std::left << std::setw(40) << vertexColumn;
             string edgeColumn = "edge label = \"" + it2->second.getLabel()+ "\"";
-            cout << std::left << std::setw(26) << edgeColumn;
-            if (weighted)
-                cout << "weight = " << it2->second.getWeight();
+            cout << std::left << std::setw(40) << edgeColumn;
+            cout << "weight = " << it2->second.getWeight();
             cout << endl;
         }
         cout << endl;
     }
 }
 
-/**
- * Saves the graph as a PNG image.
- * @param title - the filename of the PNG image
- */
-void Graph::savePNG(string title) const
-{
-    std::ofstream neatoFile;
-    string filename = "images/" + title + ".dot";
-    neatoFile.open(filename.c_str());
-
-    if (!neatoFile.good())
-        error("couldn't create " + filename + ".dot");
-
-    neatoFile
-        << "strict graph G {\n"
-        << "\toverlap=\"false\";\n"
-        << "\tdpi=\"1300\";\n"
-        << "\tsep=\"1.5\";\n"
-        << "\tnode [fixedsize=\"true\", shape=\"circle\", fontsize=\"7.0\"];\n"
-        << "\tedge [penwidth=\"1.5\", fontsize=\"7.0\"];\n";
-
-    vector<Vertex> allv = getVertices();
-    //lambda expression
-    sort(allv.begin(), allv.end(), [](const Vertex& lhs, const Vertex& rhs) {
-        return stoi(lhs.substr(3)) > stoi(rhs.substr(3));
-    });
-
-    int xpos1 = 100;
-    int xpos2 = 100;
-    int xpos, ypos;
-    for (auto it : allv) {
-        string current = it;
-        neatoFile 
-            << "\t\"" 
-            << current
-            << "\"";
-        if (current[1] == '1') {
-            ypos = 100;
-            xpos = xpos1;
-            xpos1 += 100;
-        }
-        else {
-            ypos = 200;
-            xpos = xpos2;
-            xpos2 += 100;
-        }
-        neatoFile << "[pos=\""<< xpos << "," << ypos <<"\"]";
-        neatoFile << ";\n";
-    }
-
-    neatoFile << "\tedge [penwidth=\"1.5\", fontsize=\"7.0\"];\n";
-
-    for (auto it = adjacency_list.begin(); it != adjacency_list.end(); ++it) 
-    {
-        for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) 
-        {
-            string vertex1Text = it->first;
-            string vertex2Text = it2->first;
-
-            neatoFile << "\t\"" ;
-            neatoFile << vertex1Text;
-            neatoFile << "\" -- \"" ;
-            neatoFile << vertex2Text;
-            neatoFile << "\"";
-
-            string edgeLabel = it2->second.getLabel();
-            if (edgeLabel == "WIN") {
-                neatoFile << "[color=\"blue\"]";
-            } else if (edgeLabel == "LOSE") {
-                neatoFile << "[color=\"red\"]";                
-            } else {
-                neatoFile << "[color=\"grey\"]";
-            }
-            if (weighted && it2->second.getWeight() != -1)
-                neatoFile << "[label=\"" << it2->second.getWeight() << "\"]";
-            
-            neatoFile<< "[constraint = \"false\"]" << ";\n";
-        }
-    }
-
-    neatoFile << "}";
-    neatoFile.close();
-    string command = "neato -n -Tpng " + filename + " -o " + "images/" + title
-                     + ".png 2> /dev/null";
-    int result = system(command.c_str());
-
-
-    if (result == 0) {
-        cout << "Output graph saved as images/" << title << ".png" << endl;
-    } else {
-        cout << "Failed to generate visual output graph using `neato`. Install `graphviz` or `neato` to generate a visual graph." << endl;
-    }
-
-    string rmCommand = "rm -f " + filename + " 2> /dev/null";
-    system(rmCommand.c_str());
-}
