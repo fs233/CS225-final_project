@@ -21,14 +21,17 @@ AirportGraph::AirportGraph(const std::string& file_routes, const std::string& fi
         if(!g_.routes[i].empty()){
             Vertex source_id = g_.routes[i][3];//get the source vertex
             Vertex destination_id = g_.routes[i][5];//get the dest vertex
-            std::pair<std::string, std::string> s = g_.position[source_id];
-            std::pair<std::string, std::string> d = g_.position[destination_id];
-            double weight = Distance(s, d);
+            double weight = 0.0;
+            if(source_id != "/N" && destination_id != "/N"){
+                std::pair<std::string, std::string> s = g_.position[source_id];
+                std::pair<std::string, std::string> d = g_.position[destination_id];
+                weight = Distance(s, d);
+            }
             string source_code = g_.routes[i][2];//get the source vertex
             string destination_code = g_.routes[i][4];//get the dest vertex
-            g_.insertEdge(source_id, destination_id, weight, source_code+"---to---"+destination_code);
+            g_.insertEdge(source_code, destination_code, weight, source_code+"---to---"+destination_code);
         }
-    }   
+    } 
 }
 
 double AirportGraph::Distance(std::pair<std::string, std::string> s, std::pair<std::string, std::string> d)

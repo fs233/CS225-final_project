@@ -12,7 +12,8 @@ class AirportGraph
     //constructor of the airport graph using the data provided
     AirportGraph(const std::string& file_routes, const std::string& file_airports); 
 
-    /*takes the position pair and calculate the distance in km
+    /**
+     * takes the position pair and calculate the distance in km
      * @param s, d the pair of latitude and longitude stored in the map posistion
      * */
     double Distance(std::pair<std::string, std::string> s, std::pair<std::string, std::string> d); 

@@ -15,27 +15,23 @@ using std::string;
 using std::vector;
 using std::ifstream;
 
-/*AirportGraph::AirportGraph(const std::string& file_routes, const std::string& file_airports): g_(file_routes, file_airports){
-    //Graph g_(file_routes, file_airports);//construct the graph with the data
-    int count = 0;
-    std::cout<<"R size: "<<g_.routes.size()<<std::endl;
-    std::cout<<"A size: "<<g_.position.size()<<std::endl;
+AirportGraph::AirportGraph(const std::string& file_routes, const std::string& file_airports): g_(file_routes, file_airports){
     for(unsigned i = 0; i<g_.routes.size(); i++)
     {
         if(!g_.routes[i].empty()){
             Vertex source_id = g_.routes[i][3];//get the source vertex
             Vertex destination_id = g_.routes[i][5];//get the dest vertex
-            std::pair<std::string, std::string> s = g_.position[source_id];
-            std::pair<std::string, std::string> d = g_.position[destination_id];
-            double weight = Distance(s, d);
+            double weight = 0.0;
+            if(source_id != "/N" && destination_id != "/N"){
+                std::pair<std::string, std::string> s = g_.position[source_id];
+                std::pair<std::string, std::string> d = g_.position[destination_id];
+                weight = Distance(s, d);
+            }
             string source_code = g_.routes[i][2];//get the source vertex
             string destination_code = g_.routes[i][4];//get the dest vertex
-            g_.insertEdge(source_id, destination_id, weight, source_code+"---to---"+destination_code);
-            count++;
+            g_.insertEdge(source_code, destination_code, weight, source_code+"---to---"+destination_code);
         }
     } 
-    std::cout<<"insert count: "<<count<<std::endl;  
-    std::cout<<"adj size:"<<g_.adjacency_list.size()<<std::endl;
 }
 
 double AirportGraph::Distance(std::pair<std::string, std::string> s, std::pair<std::string, std::string> d){
@@ -309,14 +305,11 @@ void Graph::error(string message) const
 {
     cerr << "\033[1;31m[Graph Error]\033[0m " + message << endl;
 }
-*/
+
 
 int main() {
     AirportGraph a_("routes.txt", "airports.txt");
-    //a_.print();
-    vector<Vertex> airp = a_.getVertices();
-    vector<Edge> routes = a_.getEdges();
-    std::cout<<airp.size()<<std::endl;
-    std::cout<<routes.size()<<std::endl;
+    a_.print();
+    
 
 }
