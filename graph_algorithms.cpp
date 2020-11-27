@@ -76,6 +76,11 @@ Edge AirportGraph::getEdge(Vertex source, Vertex destination) const
     return g_.getEdge(source, destination);
 }
 
+vector<Edge> AirportGraph::incidentEdges(Vertex v) const
+{
+    return g_.incidentEdges(v);
+}
+
 vector<Edge> AirportGraph::getEdges() const
 {
     return g_.getEdges();

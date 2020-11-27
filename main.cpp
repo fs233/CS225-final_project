@@ -306,10 +306,43 @@ void Graph::error(string message) const
     cerr << "\033[1;31m[Graph Error]\033[0m " + message << endl;
 }
 
+vector<Edge> AirportGraph::incidentEdges(Vertex v) const
+{
+    return g_.incidentEdges(v);
+}
+
+vector<Edge> Graph::incidentEdges(Vertex v) const
+{
+    if (adjacency_list.empty())
+        return vector<Edge>();
+    vector<Edge> ret;
+    set<pair<Vertex, Vertex>> seen;
+    for (auto it = adjacency_list.begin(); it != adjacency_list.end(); it++)
+    {
+        Vertex source = it->first;
+        if(source == v){
+            for (auto its = adjacency_list[source].begin(); its != adjacency_list[source].end(); its++)
+            {
+                Vertex destination = its->first;
+                if(seen.find(make_pair(source, destination)) == seen.end())
+                {
+                    //this pair is never added to seen
+                    ret.push_back(its->second);
+                    seen.insert(make_pair(source,destination));
+                }
+            }
+        }
+    }
+    return ret;
+}
+
 
 int main() {
     AirportGraph a_("routes.txt", "airports.txt");
-    a_.print();
+    vector<Edge> e = a_.incidentEdges("YYT");
+    for(Edge ee: e){
+        std::cout<<ee.getLabel()<<std::endl;
+    }
     
 
 }

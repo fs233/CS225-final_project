@@ -94,6 +94,13 @@ public:
     Edge getEdge(Vertex source, Vertex destination) const;
 
     /**
+     * get the edges that has Vertex v as the source
+     * @param - a vertex
+     * @return - a vector of edges 
+     */ 
+    vector<Edge> incidentEdges(Vertex v) const;
+    
+    /**
      * Gets all the edges in the graph.
      * @return a vector of all the edges in the graph
      */
@@ -197,9 +204,9 @@ public:
     const static string InvalidLabel;
     std::vector<std::vector<std::string>> routes; //vector containing all information from the route
     std::map<std::string, std::pair<std::string, std::string>> position; //using airport id to match with pair of latitude and longitude
-    mutable unordered_map<Vertex, unordered_map<Vertex, Edge>> adjacency_list;
+    
 private:
-   
+   mutable unordered_map<Vertex, unordered_map<Vertex, Edge>> adjacency_list;
     
 
 

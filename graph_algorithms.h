@@ -49,6 +49,13 @@ class AirportGraph
     Edge getEdge(Vertex source, Vertex destination) const;
 
     /**
+     * get the edges that has Vertex v as the source
+     * @param - a vertex
+     * @return - a vector of edges 
+     */ 
+    vector<Edge> incidentEdges(Vertex v) const;
+   
+    /**
      * Gets all the edges in the graph.
      * @return a vector of all the edges in the graph
      */
