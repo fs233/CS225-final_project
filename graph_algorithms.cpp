@@ -13,6 +13,7 @@
 using std::string;
 using std::vector;
 using std::ifstream;
+using namespace std;
 
 AirportGraph::AirportGraph(const std::string& file_routes, const std::string& file_airports): g_(file_routes, file_airports)
 {
@@ -54,8 +55,39 @@ double AirportGraph::Distance(std::pair<std::string, std::string> s, std::pair<s
  * put the functions below at the bottom
  * */
 
+vector<Vertex> AirportGraph::shortestPath(const Vertex start, const Vertex end) {
+    unordered_map<Vertex, bool> visited;
+    unordered_map<Vertex, Vertex> pred;
+    queue<Vertex> q;
 
-
+    visited[start] = true;
+    q.push(start);
+    while(!q.empty()) {
+        Vertex v = q.front();
+        q.pop();
+        vector<Vertex> adjacents = g_.getAdjacent(v);
+        for (auto a : adjacents) {
+            if (visited[a] == false) {
+                visited[a] = true;
+                pred[a] = v;
+                q.push(a);
+                if (a == end) {
+                    break;
+                }
+            }
+        }
+    }
+    vector<Vertex> path;
+    Vertex p = end;
+    while (p != start) {
+        path.push_back(p);
+        p = pred[p];
+    }
+    p = start;
+    path.push_back(p);
+    reverse(path.begin(), path.end());
+    return path;
+}
 
 vector<Vertex> AirportGraph::getAdjacent(Vertex source) const
 {

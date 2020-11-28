@@ -336,13 +336,44 @@ vector<Edge> Graph::incidentEdges(Vertex v) const
     return ret;
 }
 
+vector<Vertex> AirportGraph::shortestPath(const Vertex start, const Vertex end) {
+    unordered_map<Vertex, bool> visited;
+    unordered_map<Vertex, Vertex> pred;
+    queue<Vertex> q;
+
+    visited[start] = true;
+    q.push(start);
+    while(!q.empty()) {
+        Vertex v = q.front();
+        q.pop();
+        vector<Vertex> adjacents = g_.getAdjacent(v);
+        for (auto a : adjacents) {
+            if (visited[a] == false) {
+                visited[a] = true;
+                pred[a] = v;
+                q.push(a);
+                if (a == end) {
+                    break;
+                }
+            }
+        }
+    }
+    vector<Vertex> path;
+    Vertex p = end;
+    while (p != start) {
+        path.push_back(p);
+        p = pred[p];
+    }
+    p = start;
+    path.push_back(p);
+    reverse(path.begin(), path.end());
+    return path;
+}
 
 int main() {
     AirportGraph a_("routes.txt", "airports.txt");
-    vector<Edge> e = a_.incidentEdges("YYT");
-    for(Edge ee: e){
-        std::cout<<ee.getLabel()<<std::endl;
+    vector<Vertex> path = a_.shortestPath("PEK", "NYK");
+    for (auto i : path) {
+        cout << i << endl;
     }
-    
-
 }

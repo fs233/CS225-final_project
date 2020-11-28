@@ -4,6 +4,11 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <queue>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
 
 class AirportGraph
 {
@@ -83,6 +88,8 @@ class AirportGraph
      * print out the airport graph created
      */
     void print();
+
+    vector<Vertex> shortestPath(const Vertex start, const Vertex end);
     
     private:
 
