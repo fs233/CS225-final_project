@@ -336,6 +336,13 @@ vector<Edge> Graph::incidentEdges(Vertex v) const
     return ret;
 }
 
+double Graph::getEdgeWeight(Vertex source, Vertex destination) const
+{
+    if(assertEdgeExists(source, destination, __func__) == false)
+        return 0;
+    return adjacency_list[source][destination].getWeight();
+}
+
 vector<Vertex> AirportGraph::shortestPath(const Vertex start, const Vertex end) {
     unordered_map<Vertex, bool> visited;
     unordered_map<Vertex, Vertex> pred;
@@ -348,6 +355,9 @@ vector<Vertex> AirportGraph::shortestPath(const Vertex start, const Vertex end) 
         q.pop();
         vector<Vertex> adjacents = g_.getAdjacent(v);
         for (auto a : adjacents) {
+            if (g_.getEdgeWeight(v, a) == 0) {
+                continue;
+            }
             if (visited[a] == false) {
                 visited[a] = true;
                 pred[a] = v;

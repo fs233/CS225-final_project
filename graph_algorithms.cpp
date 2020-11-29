@@ -67,6 +67,9 @@ vector<Vertex> AirportGraph::shortestPath(const Vertex start, const Vertex end) 
         q.pop();
         vector<Vertex> adjacents = g_.getAdjacent(v);
         for (auto a : adjacents) {
+            if (g_.getEdgeWeight(v, a) == 0) {
+                continue;
+            }
             if (visited[a] == false) {
                 visited[a] = true;
                 pred[a] = v;
