@@ -13,16 +13,50 @@
 #include "../catch/catch.hpp"
 #include "../read_from_file.h"
 
+TEST_CASE("Correctly constructing the map and vector") {
+  Graph g_("routes.txt", "airports.txt");
 
-TEST_CASE("h") {
+  REQUIRE(g_.routes.size() == 67663);
+  REQUIRE(g_.position.size() == 7698);
+}
+
+TEST_CASE("Correctly reading the file") {
+  Graph g_("routes.txt", "airports.txt");
+
+  std::pair<std::string, std::string> VEY("63.42430114746094","-20.278900146484375");
+  std::pair<std::string, std::string> THF("52.472999572753906","13.403900146484375"); 
+
+  REQUIRE(g_.routes[0][2] == "AER");
+  REQUIRE(g_.routes[0][3] == "2965");
+  REQUIRE(g_.routes[0][4] == "KZN");
+  REQUIRE(g_.routes[0][5] == "2990");
+  REQUIRE(g_.routes[16734][2] == "PEK");  
+  REQUIRE(g_.routes[16734][3] == "3364");
+  REQUIRE(g_.routes[16734][4] == "JFK");
+  REQUIRE(g_.routes[16734][5] == "3797");
+  REQUIRE(g_.position["20"] == VEY);
+  REQUIRE(g_.position["343"] == THF);
+}
+
+TEST_CASE("Generating the airport graph") {
+  AirportGraph a_("routes.txt", "airports.txt");
+  REQUIRE(int(a_.getEdgeWeight("BOS", "PIT"))==797);
+  REQUIRE(int(a_.getEdgeWeight("HGH", "TPE"))==578);
+  REQUIRE(a_.getEdgeLabel("LAX", "IND")=="LAX---to---IND");
+  REQUIRE(a_.getEdgeLabel("HRK", "WAW")=="HRK---to---WAW");
+
+}
+
+
+TEST_CASE("Shrotest Path 1") {
   AirportGraph a_("routes.txt", "airports.txt");
   vector<Vertex> path = a_.shortestPath("PEK", "NYK");
 
-  vector<Vertex> path2;
-  path2.push_back("PEK");
-  path2.push_back("AMS");
-  path2.push_back("JRO");
-  path2.push_back("WIL");
-  path2.push_back("NYK");
-	REQUIRE(path == path2);
+  vector<Vertex> ans;
+  ans.push_back("PEK");
+  ans.push_back("AMS");
+  ans.push_back("JRO");
+  ans.push_back("WIL");
+  ans.push_back("NYK");
+	REQUIRE(path == ans);
 }
