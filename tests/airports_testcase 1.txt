@@ -1,0 +1,8 @@
+1190,"Tirana International Airport Mother Teresa","Tirana","Albania","TIA","LATI",41.4146995544,19.7206001282,126,1,"E","Europe/Tirane","airport","OurAirports"
+1501,"Bari Karol Wojtyła Airport","Bari","Italy","BRI","LIBD",41.138901,16.760599,177,1,"E","Europe/Rome","airport","OurAirports"
+1509,"Catania-Fontanarossa Airport","Catania","Italy","CTA","LICC",37.466801,15.0664,39,1,"E","Europe/Rome","airport","OurAirports"
+1512,"Falcone–Borsellino Airport","Palermo","Italy","PMO","LICJ",38.175999,13.091,65,1,"E","Europe/Rome","airport","OurAirports"
+1525,"Il Caravaggio International Airport","Bergamo","Italy","BGY","LIME",45.673901,9.70417,782,1,"E","Europe/Rome","airport","OurAirports"
+1538,"Bologna Guglielmo Marconi Airport","Bologna","Italy","BLQ","LIPE",44.5354,11.2887,123,1,"E","Europe/Rome","airport","OurAirports"
+1555,"Leonardo da Vinci–Fiumicino Airport","Rome","Italy","FCO","LIRF",41.8002778,12.2388889,13,1,"E","Europe/Rome","airport","OurAirports"
+4029,"Domodedovo International Airport","Moscow","Russia","DME","UUDD",55.40879821777344,37.90629959106445,588,3,"N","Europe/Moscow","airport","OurAirports"

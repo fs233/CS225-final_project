@@ -14,10 +14,10 @@
 #include "../read_from_file.h"
 
 TEST_CASE("Correctly constructing the map and vector") {
-  Graph g_("routes.txt", "airports.txt");
+  Graph g_("routes_testcase 1.txt", "airports_testcase 1.txt");
 
-  REQUIRE(g_.routes.size() == 67663);
-  REQUIRE(g_.position.size() == 7698);
+  REQUIRE(g_.routes.size() == 16);
+  REQUIRE(g_.position.size() == 8);
 }
 
 TEST_CASE("Correctly reading the file") {
