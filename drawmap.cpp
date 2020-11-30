@@ -42,6 +42,32 @@ void drawline(cs225::PNG* image,double lati1,double longi1,double lati2,double l
 {
   unsigned int width= image->width(),height=image->height();
 
+ 
+  if(longi1-longi2)<=-180){
+      double temp=lati1+(lati2-lati1)*(longi1+180.0)/(longi1-longi2+360.0)
+      drawline(image,lati1,longi1,temp,-180.0);
+      drawline(image,lati2,longi2,temp,180.0);
+      return
+  }
+  else if(longi1-longi2)>=180){
+      double temp=lati2+(lati1-lati2)*(longi2+180.0)/(longi2-longi1+360.0)
+      drawline(image,lati2,longi2,temp,-180.0);
+      drawline(image,lati1,longi1,temp,180.0);
+      return
+  }else{
+    if (longi1<longi2) int stepi=1 else int stepi=-1;
+    if (lati1>lati2) int stepj=1; else int stepj=-1;
+    unsigned int x1=unsigned int(width/2 + (longi1/360)*width);
+    unsigned int y1=unsigned int(height/2 - (lati1/180)*height);
+    unsigned int x2=unsigned int(width/2 + (longi2/360)*width);
+    unsigned int y2=unsigned int(height/2 - (lati2/180)*height);
+    for (unsigned i = x1; (int)i*stepi <= (int)x2*stepi; i+=stepi) {
+    for (unsigned j = y1; (int)j*stepj <= (int)y2*stepj; j+=stepj) {
+          //to be continue
+      }
+    }
+  }
+
 
   return;
 }
