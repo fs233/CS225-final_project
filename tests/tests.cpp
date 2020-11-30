@@ -51,11 +51,17 @@ TEST_CASE("bfs") {
     std::cout << t << std::endl;
   }
   vector<Vertex> traversal2;
+  traversal2.push_back("SHA");
   traversal2.push_back("PEK");
+  traversal2.push_back("JFK");
+  traversal2.push_back("NRT");
+  traversal2.push_back("LHR");
+  traversal2.push_back("SYD");
+  traversal2.push_back("LAX");
   REQUIRE(traversal == traversal2);
 }
 
-TEST_CASE("Shortest Path 1") {
+/*TEST_CASE("Shortest Path 1") {
   AirportGraph a_("routes3.txt", "airports.txt");
   vector<Vertex> path = a_.shortestPath("SHA", "WIL");
   for (auto p : path) {
@@ -68,4 +74,4 @@ TEST_CASE("Shortest Path 1") {
   ans.push_back("WIL");
   ans.push_back("NYK");
 	REQUIRE(path == ans);
-}
+}*/
