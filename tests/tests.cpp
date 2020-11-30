@@ -13,38 +13,35 @@
 #include "../catch/catch.hpp"
 #include "../read_from_file.h"
 
-TEST_CASE("Correctly constructing the map and vector") {
+TEST_CASE("Correctly reading the file") {
   Graph g_("routes_testcase 1.txt", "airports_testcase 1.txt");
 
   REQUIRE(g_.routes.size() == 16);
   REQUIRE(g_.position.size() == 8);
+  
+ //BV,1463,BGY,1525,TIA,1190,,0,737
+  REQUIRE(g_.routes[0][2] == "BGY");
+  REQUIRE(g_.routes[0][3] == "1525");
+  REQUIRE(g_.routes[0][4] == "TIA");
+  REQUIRE(g_.routes[0][5] == "1190");
+  //BV,1463,FCO,1555,PMO,1512,,0,737
+  REQUIRE(g_.routes[8][2] == "FCO");
+  REQUIRE(g_.routes[8][3] == "1555");
+  REQUIRE(g_.routes[8][4] == "PMO");
+  REQUIRE(g_.routes[8][5] == "1512");
+  
+  std::pair<std::string, std::string> TIA("41.4146995544","19.7206001282");
+  std::pair<std::string, std::string> FCO("41.8002778","12.2388889"); 
+  REQUIRE(g_.position["1190"] == TIA);
+  REQUIRE(g_.position["1555"] == FCO);
+
 }
 
-TEST_CASE("Correctly reading the file") {
-  Graph g_("routes.txt", "airports.txt");
-
-  std::pair<std::string, std::string> VEY("63.42430114746094","-20.278900146484375");
-  std::pair<std::string, std::string> THF("52.472999572753906","13.403900146484375"); 
-
-  REQUIRE(g_.routes[0][2] == "AER");
-  REQUIRE(g_.routes[0][3] == "2965");
-  REQUIRE(g_.routes[0][4] == "KZN");
-  REQUIRE(g_.routes[0][5] == "2990");
-  REQUIRE(g_.routes[16734][2] == "PEK");  
-  REQUIRE(g_.routes[16734][3] == "3364");
-  REQUIRE(g_.routes[16734][4] == "JFK");
-  REQUIRE(g_.routes[16734][5] == "3797");
-  REQUIRE(g_.position["20"] == VEY);
-  REQUIRE(g_.position["343"] == THF);
-}
-
-TEST_CASE("Generating the airport graph") {
-  AirportGraph a_("routes.txt", "airports.txt");
-  REQUIRE(int(a_.getEdgeWeight("BOS", "PIT"))==797);
-  REQUIRE(int(a_.getEdgeWeight("HGH", "TPE"))==578);
-  REQUIRE(a_.getEdgeLabel("LAX", "IND")=="LAX---to---IND");
-  REQUIRE(a_.getEdgeLabel("HRK", "WAW")=="HRK---to---WAW");
-
+TEST_CASE("Generating the airport graph correctly") {
+  AirportGraph a_("routes_testcase 1.txt", "airports_testcase 1.txt");
+  REQUIRE(int(a_.getEdgeWeight("TIA", "FCO"))==624);
+  REQUIRE(int(a_.getEdgeWeight("PMO", "BRI"))==455);
+  REQUIRE(a_.getEdgeLabel("BLQ", "TIA")=="BLQ---to---TIA");
 }
 
 TEST_CASE("bfs") {
