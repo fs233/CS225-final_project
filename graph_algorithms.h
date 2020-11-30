@@ -89,6 +89,8 @@ class AirportGraph
      */
     void print();
 
+    vector<Vertex> bfs(const Vertex start);
+
     vector<Vertex> shortestPath(const Vertex start, const Vertex end);
     
     private:

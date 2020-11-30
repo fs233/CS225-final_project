@@ -55,6 +55,27 @@ double AirportGraph::Distance(std::pair<std::string, std::string> s, std::pair<s
  * put the functions below at the bottom
  * */
 
+vector<Vertex> AirportGraph::bfs(const Vertex start) {
+    unordered_map<Vertex, bool> visited;
+    queue<Vertex> q;
+    vector<Vertex> traversal; 
+    visited[start] = true;
+    q.push(start);
+    while (!q.empty()) {
+        Vertex v = q.front();
+        traversal.push_back(v);
+        q.pop();
+        vector<Vertex> adjacents = g_.getAdjacent(v);
+        for (auto a : adjacents) {
+            if (!visited[a]) {
+                visited[a] = true;
+                q.push(a);
+            }
+        }
+    }
+    return traversal;
+}
+
 vector<Vertex> AirportGraph::shortestPath(const Vertex start, const Vertex end) {
     unordered_map<Vertex, bool> visited;
     unordered_map<Vertex, Vertex> pred;
@@ -70,7 +91,7 @@ vector<Vertex> AirportGraph::shortestPath(const Vertex start, const Vertex end) 
             if (g_.getEdgeWeight(v, a) == 0) {
                 continue;
             }
-            if (visited[a] == false) {
+            if (!visited[a]) {
                 visited[a] = true;
                 pred[a] = v;
                 q.push(a);
