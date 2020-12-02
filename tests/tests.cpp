@@ -44,34 +44,43 @@ TEST_CASE("Generating the airport graph correctly") {
   REQUIRE(a_.getEdgeLabel("BLQ", "TIA")=="BLQ---to---TIA");
 }
 
-TEST_CASE("bfs") {
-  AirportGraph a_("routes3.txt", "airports.txt");
-  vector<Vertex> traversal = a_.bfs("SHA");
-  for (auto t : traversal) {
-    std::cout << t << std::endl;
-  }
+TEST_CASE("BFS Traversal 1") {
+  AirportGraph a_("routes_testcase 1.txt", "airports_testcase 1.txt");
+  vector<Vertex> traversal = a_.bfs("FCO");
   vector<Vertex> traversal2;
-  traversal2.push_back("SHA");
-  traversal2.push_back("PEK");
-  traversal2.push_back("JFK");
-  traversal2.push_back("NRT");
-  traversal2.push_back("LHR");
-  traversal2.push_back("SYD");
-  traversal2.push_back("LAX");
+  traversal2.push_back("FCO");
+  traversal2.push_back("TIA");
+  traversal2.push_back("PMO");
+  traversal2.push_back("DME");
+  traversal2.push_back("CTA");
+  traversal2.push_back("BLQ");
+  traversal2.push_back("BGY");
+  traversal2.push_back("BRI");
   REQUIRE(traversal == traversal2);
 }
 
-/*TEST_CASE("Shortest Path 1") {
-  AirportGraph a_("routes3.txt", "airports.txt");
-  vector<Vertex> path = a_.shortestPath("SHA", "WIL");
-  for (auto p : path) {
-    std::cout << p << std::endl;
-  }
+TEST_CASE("BFS Traversal 2") {
+  AirportGraph a_("routes_testcase 1.txt", "airports_testcase 1.txt");
+  vector<Vertex> traversal = a_.bfs("DME");
+  vector<Vertex> test;
+  test.push_back("DME");
+  test.push_back("FCO");
+  test.push_back("TIA");
+  test.push_back("PMO");
+  test.push_back("CTA");
+  test.push_back("BLQ");
+  test.push_back("BGY");
+  test.push_back("BRI");
+  REQUIRE(traversal == test);
+}
+
+TEST_CASE("Shortest Path") {
+  AirportGraph a_("routes_testcase 1.txt", "airports_testcase 1.txt");
+  vector<Vertex> path = a_.shortestPath("BGY", "DME");
   vector<Vertex> ans;
-  ans.push_back("PEK");
-  ans.push_back("AMS");
-  ans.push_back("JRO");
-  ans.push_back("WIL");
-  ans.push_back("NYK");
+  ans.push_back("BGY");
+  ans.push_back("TIA");
+  ans.push_back("FCO");
+  ans.push_back("DME");
 	REQUIRE(path == ans);
-}*/
+}
