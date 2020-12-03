@@ -44,3 +44,23 @@ test: output_msg catch/catchmain.cpp tests/tests.cpp read_from_file.cpp graph_al
 
 clean:
 	-rm -f *.o $(EXENAME) test
+
+#for drawmap testing
+
+drawmap: output_msg drawmap.o PNG.o HSLAPixel.o lodepng.o
+	$(LD) drawmap.o PNG.o HSLAPixel.o lodepng.o $(LDFLAGS) -o drawmap
+
+drwamap.o: drawmap.cpp drawmap.h
+	$(CXX) $(CXXFLAGS) drawmap.cpp
+
+PNG.o : cs225/PNG.cpp cs225/PNG.h cs225/HSLAPixel.h cs225/lodepng/lodepng.h
+	$(CXX) $(CXXFLAGS) cs225/PNG.cpp
+
+HSLAPixel.o : cs225/HSLAPixel.cpp cs225/HSLAPixel.h
+	$(CXX) $(CXXFLAGS) cs225/HSLAPixel.cpp
+
+lodepng.o : cs225/lodepng/lodepng.cpp cs225/lodepng/lodepng.h
+	$(CXX) $(CXXFLAGS) cs225/lodepng/lodepng.cpp
+
+
+
