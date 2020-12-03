@@ -60,17 +60,19 @@ TEST_CASE("BFS Traversal 1") {
 }
 
 TEST_CASE("BFS Traversal 2") {
-  AirportGraph a_("routes_testcase 1.txt", "airports_testcase 1.txt");
-  vector<Vertex> traversal = a_.bfs("DME");
+  AirportGraph a_("routes_testcase 2.txt", "airports_testcase 2.txt");
+  vector<Vertex> traversal = a_.bfs("PEK");
   vector<Vertex> test;
-  test.push_back("DME");
-  test.push_back("FCO");
-  test.push_back("TIA");
-  test.push_back("PMO");
-  test.push_back("CTA");
-  test.push_back("BLQ");
-  test.push_back("BGY");
-  test.push_back("BRI");
+  test.push_back("PEK");
+  test.push_back("SZX");
+  test.push_back("NNG");
+  test.push_back("CSX");
+  test.push_back("CAN");
+  test.push_back("TYN");
+  test.push_back("WUH");
+  test.push_back("CGO");
+  test.push_back("KWL");
+  test.push_back("HLD");
   REQUIRE(traversal == test);
 }
 
