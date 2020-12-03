@@ -41,7 +41,7 @@ std::vector<std::vector<std::string>> Graph::read_route(const std::string& filen
             one_route.push_back(destination);
             one_route.push_back(destination_id);
             one_route.push_back(other_info);
-            //strong one route in to the collection of the routes
+            //store one route in to the collection of the routes
             routes.push_back(one_route);
         }
     }

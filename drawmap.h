@@ -1,8 +1,11 @@
 #pragma once
 
 #include "cs225/PNG.h"
-
+#include "graph.h"
+#include "edge.h"
+#include "graph_algorithms.h"
 #include <string>
+
 cs225::PNG* opennewmap(); 
 void drawpoint(cs225::PNG* image,double lati,double longi);
 void drawline(cs225::PNG* image,double lati1,double longi1,double lati2,double longi2);

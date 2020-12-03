@@ -4,7 +4,7 @@ OBJS = read_from_file.o graph.o graph_algorithms.o main.o
 CXX = clang++
 CXXFLAGS = $(CS225) -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -pedantic
 LD = clang++
-LDFLAGS = -std=c++1y -stdlib=libc++ -lc++abi -lm
+LDFLAGS = $(CS225) -std=c++1y -stdlib=libc++ -lc++abi -lm
 
 # Custom Clang version enforcement Makefile rule:
 ccred=$(shell echo -e "\033[0;31m")
@@ -41,12 +41,7 @@ read_from_file.o: main.cpp read_from_file.cpp
 
 test: output_msg catch/catchmain.cpp tests/tests.cpp read_from_file.cpp graph_algorithms.cpp graph.cpp
 	$(LD) catch/catchmain.cpp tests/tests.cpp read_from_file.cpp graph_algorithms.cpp graph.cpp $(LDFLAGS) -o test
-
-clean:
-	-rm -f *.o $(EXENAME) test
-
-#for drawmap testing
-
+	
 drawmap: output_msg drawmap.o PNG.o HSLAPixel.o lodepng.o
 	$(LD) drawmap.o PNG.o HSLAPixel.o lodepng.o $(LDFLAGS) -o drawmap
 
@@ -61,6 +56,15 @@ HSLAPixel.o : cs225/HSLAPixel.cpp cs225/HSLAPixel.h
 
 lodepng.o : cs225/lodepng/lodepng.cpp cs225/lodepng/lodepng.h
 	$(CXX) $(CXXFLAGS) cs225/lodepng/lodepng.cpp
+
+#main.o : main.cpp
+	#$(CXX) $(CXXFLAGS) main.cpp
+
+clean:
+	-rm -f *.o $(EXENAME) test
+
+#for drawmap testing
+
 
 
 
