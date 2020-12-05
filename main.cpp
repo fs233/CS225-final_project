@@ -24,7 +24,7 @@ int main() {
     cout << i << endl;
   }*/
 
-  std::pair<std::string, std::string> PMO("38.175999","13.091");
-  std::pair<std::string, std::string> BRI("41.138901","16.760599"); 
-  std::cout<<Distance(PMO, BRI)<<std::endl;
+  //std::pair<std::string, std::string> PMO("38.175999","13.091");
+  //std::pair<std::string, std::string> BRI("41.138901","16.760599"); 
+  //std::cout<<Distance(PMO, BRI)<<std::endl;
 }

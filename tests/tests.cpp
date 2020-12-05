@@ -76,7 +76,7 @@ TEST_CASE("BFS Traversal 2") {
   REQUIRE(traversal == test);
 }
 
-/*TEST_CASE("Shortest Path") {
+TEST_CASE("Shortest Path") {
   AirportGraph a_("routes_testcase 1.txt", "airports_testcase 1.txt");
   vector<Vertex> path = a_.shortestPath("BGY", "DME");
   vector<Vertex> ans;
@@ -85,4 +85,15 @@ TEST_CASE("BFS Traversal 2") {
   ans.push_back("FCO");
   ans.push_back("DME");
 	REQUIRE(path == ans);
-}*/
+}
+
+TEST_CASE("S") {
+  AirportGraph a_("routes_testcase 1.txt", "airports_testcase 1.txt");
+  vector<Vertex> path = a_.shortestdijkstra("BGY", "DME");
+  vector<Vertex> ans;
+  ans.push_back("BGY");
+  ans.push_back("TIA");
+  ans.push_back("FCO");
+  ans.push_back("DME");
+  REQUIRE(path == ans);
+}

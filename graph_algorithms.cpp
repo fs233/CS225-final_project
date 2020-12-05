@@ -113,6 +113,63 @@ vector<Vertex> AirportGraph::shortestPath(const Vertex start, const Vertex end) 
     return path;
 }
 
+
+vector<Vertex> AirportGraph::shortestdijkstra(const Vertex start, const Vertex end) {
+  //double max = std::numeric_limits<double>::max();
+  unordered_map<Vertex, int> dist;
+  unordered_map<Vertex, Vertex> P;
+  vector<Vertex> wr = g_.getVertices();
+  vector<Vertex> q;
+  Vertex k;
+  vector<Vertex> path;
+  for (auto a : wr) {
+    dist[a] = 100000;
+    P[a] = k;
+    q.push_back(a);
+  }
+  dist[start] = 0;
+  while (!q.empty()) {
+    int u = 100000;
+    Vertex o;
+    for (auto i : q) {
+      if (dist[i] <= u) {
+        u = dist[i];
+        o = i;
+      }
+    }
+    vector<Vertex> qq = q;
+    q.clear();
+    for (auto a : qq) {
+      if (a == o) {
+        continue;
+      }
+      q.push_back(a);
+    }
+    if (P[end] != k) {
+      Vertex ppp = end;
+      while (ppp != k) {
+         path.push_back(ppp);
+         ppp = P[ppp];
+         //if (P[ppp] == start) {
+           //break;
+         //}
+      }
+      break;
+    }
+    vector<Vertex> adjacents = g_.getAdjacent(o);
+    for (auto a : adjacents) {
+      if (g_.getEdgeWeight(o, a) + dist[o] < dist[a]) {
+        dist[a] = g_.getEdgeWeight(o, a) + dist[o];
+        P[a] = o;
+      }
+    }
+    
+  }
+  
+  reverse(path.begin(), path.end());
+  return path;
+}
+
 vector<Vertex> AirportGraph::getAdjacent(Vertex source) const
 {
     return g_.getAdjacent(source);
