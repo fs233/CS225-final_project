@@ -42,8 +42,8 @@ read_from_file.o: main.cpp read_from_file.cpp
 test: output_msg catch/catchmain.cpp tests/tests.cpp read_from_file.cpp graph_algorithms.cpp graph.cpp
 	$(LD) catch/catchmain.cpp tests/tests.cpp read_from_file.cpp graph_algorithms.cpp graph.cpp $(LDFLAGS) -o test
 	
-drawmap: output_msg drawmap.o PNG.o HSLAPixel.o lodepng.o
-	$(LD) drawmap.o PNG.o HSLAPixel.o lodepng.o $(LDFLAGS) -o drawmap
+drawmap: output_msg drawmap.o PNG.o HSLAPixel.o lodepng.o graph.o graph_algorithms.o read_from_file.o
+	$(LD) drawmap.o PNG.o HSLAPixel.o lodepng.o graph.o graph_algorithms.o read_from_file.o $(LDFLAGS) -o drawmap
 
 drwamap.o: drawmap.cpp drawmap.h
 	$(CXX) $(CXXFLAGS) drawmap.cpp

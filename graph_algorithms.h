@@ -91,10 +91,17 @@ class AirportGraph
 
     vector<Vertex> bfs(const Vertex start);
 
-    vector<Vertex> shortestPath(const Vertex start, const Vertex end);
     vector<Vertex> shortestdijkstra(const Vertex start, const Vertex end);
+
+    std::vector<std::vector<std::string>> routes; //vector containing all information from the route
+    
+    std::map<std::string, std::pair<std::string, std::string>> position;
+
+    std::map<std::string, std::string> ID;
+
     private:
 
     Graph g_;
 
+    
 };

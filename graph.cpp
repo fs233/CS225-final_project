@@ -9,6 +9,7 @@ const Edge Graph::InvalidEdge = Edge(Graph::InvalidVertex, Graph::InvalidVertex,
 Graph::Graph(const std::string& file_routes, const std::string& file_airports){
     routes = read_route(file_routes);
     position = read_airports(file_airports);
+    ID = getID(file_airports);
 }
 
 std::vector<std::vector<std::string>> Graph::read_route(const std::string& filename){
@@ -81,6 +82,40 @@ std::map<std::string, std::pair<std::string, std::string>> Graph::read_airports(
      wordsFile.close();
      return position;
 }
+
+std::map<std::string, std::string> Graph::getID(const std::string& filename){
+    std::map<std::string, std::string> ID;
+    ifstream wordsFile(filename);
+    string airport_id;
+    string name;
+    string city;
+    string country;
+    string iata;
+    string icao;
+    string other_info;
+    if (wordsFile.is_open()) {
+        while(wordsFile.good()){
+            getline(wordsFile, airport_id,',');
+            getline(wordsFile, name,',');
+            getline(wordsFile, city,',');
+            getline(wordsFile, country,',');
+            getline(wordsFile, iata,',');
+            getline(wordsFile, icao,',');
+            getline(wordsFile, other_info,'\n');//other useless
+            string iata_clean = iata.substr(1, iata.length()-2);
+            if(ID.find(iata_clean)==ID.end()){
+                ID[iata_clean] = airport_id;//storing the information needed in to the dictionary
+            }
+            string icao_clean = icao.substr(1, icao.length()-2);
+            if(ID.find(icao_clean)==ID.end()){
+                ID[icao_clean] = airport_id;//storing the information needed in to the dictionary
+            }
+        }
+    }
+     wordsFile.close();
+     return ID;
+}
+
 
 vector<Vertex> Graph::getAdjacent(Vertex source) const 
 {

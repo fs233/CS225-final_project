@@ -33,6 +33,9 @@ AirportGraph::AirportGraph(const std::string& file_routes, const std::string& fi
             g_.insertEdge(source_code, destination_code, weight, source_code+"---to---"+destination_code);
         }
     } 
+    routes = g_.routes;
+    position = g_.position;
+    ID = g_.ID;
 }
 
 double AirportGraph::Distance(std::pair<std::string, std::string> s, std::pair<std::string, std::string> d)
@@ -74,43 +77,6 @@ vector<Vertex> AirportGraph::bfs(const Vertex start) {
         }
     }
     return traversal;
-}
-
-vector<Vertex> AirportGraph::shortestPath(const Vertex start, const Vertex end) {
-    unordered_map<Vertex, bool> visited;
-    unordered_map<Vertex, Vertex> pred;
-    queue<Vertex> q;
-
-    visited[start] = true;
-    q.push(start);
-    while(!q.empty()) {
-        Vertex v = q.front();
-        q.pop();
-        vector<Vertex> adjacents = g_.getAdjacent(v);
-        for (auto a : adjacents) {
-            if (g_.getEdgeWeight(v, a) == 0) {
-                continue;
-            }
-            if (!visited[a]) {
-                visited[a] = true;
-                pred[a] = v;
-                q.push(a);
-                if (a == end) {
-                    break;
-                }
-            }
-        }
-    }
-    vector<Vertex> path;
-    Vertex p = end;
-    while (p != start) {
-        path.push_back(p);
-        p = pred[p];
-    }
-    p = start;
-    path.push_back(p);
-    reverse(path.begin(), path.end());
-    return path;
 }
 
 

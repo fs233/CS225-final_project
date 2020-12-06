@@ -15,9 +15,11 @@
 
 TEST_CASE("Correctly reading the file") {
   Graph g_("routes_testcase 1.txt", "airports_testcase 1.txt");
-
+   
   REQUIRE(g_.routes.size() == 16);
   REQUIRE(g_.position.size() == 8);
+  REQUIRE(g_.ID["TIA"] == "1190");
+  REQUIRE(g_.ID["LIME"] == "1525");
   
  //BV,1463,BGY,1525,TIA,1190,,0,737
   REQUIRE(g_.routes[0][2] == "BGY");
@@ -76,18 +78,8 @@ TEST_CASE("BFS Traversal 2") {
   REQUIRE(traversal == test);
 }
 
-TEST_CASE("Shortest Path") {
-  AirportGraph a_("routes_testcase 1.txt", "airports_testcase 1.txt");
-  vector<Vertex> path = a_.shortestPath("BGY", "DME");
-  vector<Vertex> ans;
-  ans.push_back("BGY");
-  ans.push_back("TIA");
-  ans.push_back("FCO");
-  ans.push_back("DME");
-	REQUIRE(path == ans);
-}
 
-TEST_CASE("S") {
+TEST_CASE("Shortest Path") {
   AirportGraph a_("routes_testcase 1.txt", "airports_testcase 1.txt");
   vector<Vertex> path = a_.shortestdijkstra("BGY", "DME");
   vector<Vertex> ans;

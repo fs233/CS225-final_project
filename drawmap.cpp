@@ -163,11 +163,28 @@ void drawlinelow(cs225::PNG* image,int x1, int y1,int x2,int y2)
   return;
 }
 
+void draw_map(const std::string& file_routes, const std::string& file_airports, Vertex start, Vertex end)
+{
+  cs225::PNG* image;
+	image=opennewmap();
+  AirportGraph a_(file_routes, file_airports);
+  vector<Vertex> path = a_.shortestdijkstra(start, end);
+  for(unsigned i = 0; i<path.size()-1; i++)
+  {
+    string id  = a_.ID[path[i]];
+    string id_next  = a_.ID[path[i+1]];
+    drawpoint(image, std::atof(a_.position[id].first.c_str()), std::atof(a_.position[id].second.c_str()));
+    drawpoint(image, std::atof(a_.position[id_next].first.c_str()), std::atof(a_.position[id_next].second.c_str()));
+    drawline(image,std::atof(a_.position[id].first.c_str()), std::atof(a_.position[id].second.c_str()), std::atof(a_.position[id_next].first.c_str()), std::atof(a_.position[id_next].second.c_str()));
+  }
+
+	outputmap(image);
+}
 
 //test only
 int main()
 {
-	cs225::PNG* image;
+	/*cs225::PNG* image;
 	image=opennewmap();
   drawpoint(image,39.5,115.5);
   drawpoint(image,30.5,120.5);
@@ -177,9 +194,8 @@ int main()
 
   drawline(image,30.5,120.5,39.5,115.5);
   drawline(image,47.3,-122.1,30.5,120.5);
-  drawline(image,47.3,-122.1,40.6,-73.9);
-
-	outputmap(image);
+  drawline(image,47.3,-122.1,40.6,-73.9);*/
+  draw_map("routes.txt", "airports.txt", "CGO", "ORD");
 	return 0;
 }
 

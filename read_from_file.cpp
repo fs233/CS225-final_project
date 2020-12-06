@@ -81,3 +81,35 @@ std::map<std::string, std::pair<std::string, std::string>> readfile::read_airpor
      wordsFile.close();
      return position;
 }
+
+std::map<std::string, std::string> readfile::getID(const std::string& filename){
+    std::map<std::string, std::string> ID;
+    ifstream wordsFile(filename);
+    string airport_id;
+    string name;
+    string city;
+    string country;
+    string iata;
+    string icao;
+    string other_info;
+    if (wordsFile.is_open()) {
+        while(wordsFile.good()){
+            getline(wordsFile, airport_id,',');
+            getline(wordsFile, name,',');
+            getline(wordsFile, city,',');
+            getline(wordsFile, country,',');
+            getline(wordsFile, iata,',');
+            getline(wordsFile, icao,',');
+            getline(wordsFile, other_info,'\n');//other useless
+            if(ID.find(iata)==ID.end()){
+                ID[iata] = airport_id;//storing the information needed in to the dictionary
+            }
+            if(ID.find(icao)==ID.end()){
+                ID[icao] = airport_id;//storing the information needed in to the dictionary
+            }
+        }
+    }
+     wordsFile.close();
+     return ID;
+}
+

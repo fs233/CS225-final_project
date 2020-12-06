@@ -62,7 +62,11 @@ public:
      * @param filname - file including the routes
      */
     std::map<std::string, std::pair<std::string, std::string>> read_airports(const std::string& filename); //get the data of the airports
-
+    /**
+     * get the map that match IATA and ICAO with id
+     * @param filname - file including the airports
+     */ 
+    std::map<std::string, std::string> getID(const std::string& filename);
     /**
      * Gets all adjacent vertices to the parameter vertex.
      * @param source - vertex to get neighbors from
@@ -204,7 +208,8 @@ public:
     const static string InvalidLabel;
     std::vector<std::vector<std::string>> routes; //vector containing all information from the route
     std::map<std::string, std::pair<std::string, std::string>> position; //using airport id to match with pair of latitude and longitude
-    
+    std::map<std::string, std::string> ID;
+
 private:
    mutable unordered_map<Vertex, unordered_map<Vertex, Edge>> adjacency_list;
     
