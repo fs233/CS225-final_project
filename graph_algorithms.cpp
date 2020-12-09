@@ -81,44 +81,40 @@ vector<Vertex> AirportGraph::bfs(const Vertex start) {
 
 
 vector<Vertex> AirportGraph::shortestdijkstra(const Vertex start, const Vertex end) {
-  //double max = std::numeric_limits<double>::max();
   unordered_map<Vertex, int> dist;
-  unordered_map<Vertex, Vertex> P;
-  vector<Vertex> wr = g_.getVertices();
-  vector<Vertex> q;
-  Vertex k;
+  unordered_map<Vertex, Vertex> Prev;
+  vector<Vertex> allnodes = g_.getVertices();
+  vector<Vertex> route;
+  Vertex undefine;
   vector<Vertex> path;
-  for (auto a : wr) {
+  for (auto a : allnodes) {
     dist[a] = 100000;
-    P[a] = k;
-    q.push_back(a);
+    Prev[a] = undefine;
+    route.push_back(a);
   }
   dist[start] = 0;
-  while (!q.empty()) {
+  while (!route.empty()) {
     int u = 100000;
     Vertex o;
-    for (auto i : q) {
+    for (auto i : route) {
       if (dist[i] <= u) {
         u = dist[i];
         o = i;
       }
     }
-    vector<Vertex> qq = q;
-    q.clear();
-    for (auto a : qq) {
+    vector<Vertex> curr = route;
+    route.clear();
+    for (auto a : curr) {
       if (a == o) {
         continue;
       }
-      q.push_back(a);
+      route.push_back(a);
     }
-    if (P[end] != k) {
-      Vertex ppp = end;
-      while (ppp != k) {
-         path.push_back(ppp);
-         ppp = P[ppp];
-         //if (P[ppp] == start) {
-           //break;
-         //}
+    if (Prev[end] != undefine) {
+      Vertex en = end;
+      while (en != undefine) {
+         path.push_back(en);
+         en = Prev[en];
       }
       break;
     }
@@ -126,7 +122,7 @@ vector<Vertex> AirportGraph::shortestdijkstra(const Vertex start, const Vertex e
     for (auto a : adjacents) {
       if (g_.getEdgeWeight(o, a) + dist[o] < dist[a]) {
         dist[a] = g_.getEdgeWeight(o, a) + dist[o];
-        P[a] = o;
+        Prev[a] = o;
       }
     }
     
