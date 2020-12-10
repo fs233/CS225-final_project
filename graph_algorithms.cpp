@@ -120,6 +120,9 @@ vector<Vertex> AirportGraph::shortestdijkstra(const Vertex start, const Vertex e
     }
     vector<Vertex> adjacents = g_.getAdjacent(o);
     for (auto a : adjacents) {
+      if (g_.getEdgeWeight(o, a) == 0) {
+        continue;
+      }
       if (g_.getEdgeWeight(o, a) + dist[o] < dist[a]) {
         dist[a] = g_.getEdgeWeight(o, a) + dist[o];
         Prev[a] = o;
